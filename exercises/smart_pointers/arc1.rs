@@ -5,7 +5,11 @@
 // set of numbers within 8 different threads simultaneously. Each thread is
 // going to get the sum of every eighth value, with an offset.
 //
+// 本练习中，我们有一个名为 "numbers" 的 u32 向量，包含从 0 到 99 的值 -- [ 0, 1, 2, ..., 98, 99 ]。
+// 我们希望在 8 个不同的线程中同时使用这组数字。每个线程将计算每隔 8 个数的和，带有一个偏移量。
+//
 // The first thread (offset 0), will sum 0, 8, 16, ...
+// 第一个线程（偏移量 0），会累加 0, 8, 16, ...
 // The second thread (offset 1), will sum 1, 9, 17, ...
 // The third thread (offset 2), will sum 2, 10, 18, ...
 // ...
@@ -21,7 +25,6 @@
 //
 // Execute `rustlings hint arc1` or use the `hint` watch subcommand for a hint.
 
-// I AM NOT DONE
 
 #![forbid(unused_imports)] // Do not change this, (or the next) line.
 use std::sync::Arc;
@@ -29,11 +32,11 @@ use std::thread;
 
 fn main() {
     let numbers: Vec<_> = (0..100u32).collect();
-    let shared_numbers = // TODO
+    let shared_numbers = Arc::new(numbers);// TODO
     let mut joinhandles = Vec::new();
 
     for offset in 0..8 {
-        let child_numbers = // TODO
+        let child_numbers = shared_numbers.clone(); // TODO
         joinhandles.push(thread::spawn(move || {
             let sum: u32 = child_numbers.iter().filter(|&&n| n % 8 == offset).sum();
             println!("Sum of offset {} is {}", offset, sum);
