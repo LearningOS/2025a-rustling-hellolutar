@@ -72,9 +72,29 @@ impl<T> LinkedList<T> {
             },
         }
     }
-	pub fn reverse(&mut self){
-		// TODO
-	}
+	pub fn reverse(&mut self) {
+        // TODO
+        let mut left_p = self.start.unwrap();
+        let mut right_p = self.end.unwrap();
+        unsafe {
+            while left_p != right_p {
+                std::mem::swap(&mut (*left_p.as_ptr()).val, &mut (*right_p.as_ptr()).val);
+
+                // Move pointers towards center
+                left_p = (*left_p.as_ptr()).next.unwrap();
+
+                if left_p == right_p {
+                    break;
+                }
+
+                right_p = (*right_p.as_ptr()).prev.unwrap();
+                println!("test");
+            }
+
+            println!("hello");
+            println!("???????????? {:?}", self.end);
+        }
+    }
 }
 
 impl<T> Display for LinkedList<T>
