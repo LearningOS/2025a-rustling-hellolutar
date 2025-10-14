@@ -1,8 +1,7 @@
 /*
-	heap
-	This question requires you to implement a binary heap function
+    heap
+    This question requires you to implement a binary heap function
 */
-// I AM NOT DONE
 
 use std::cmp::Ord;
 use std::default::Default;
@@ -37,7 +36,17 @@ where
     }
 
     pub fn add(&mut self, value: T) {
-        //TODO
+        self.count += 1;
+        if self.count >= self.items.len() {
+            self.items.push(value);
+        } else {
+            self.items[self.count] = value;
+        }
+        let mut idx = self.count;
+        while idx / 2 > 0 && (self.comparator)(&self.items[idx], &self.items[idx / 2]) {
+            self.items.swap(idx, idx / 2);
+            idx = idx / 2;
+        }
     }
 
     fn parent_idx(&self, idx: usize) -> usize {
@@ -57,8 +66,18 @@ where
     }
 
     fn smallest_child_idx(&self, idx: usize) -> usize {
-        //TODO
-		0
+        let left = self.left_child_idx(idx);
+        let right = self.right_child_idx(idx);
+
+        if right > self.count {
+            left
+        } else {
+            if (self.comparator)(&self.items[left], &self.items[right]) {
+                left
+            } else {
+                right
+            }
+        }
     }
 }
 
@@ -84,8 +103,34 @@ where
     type Item = T;
 
     fn next(&mut self) -> Option<T> {
-        //TODO
-		None
+        if self.is_empty() {
+            return None;
+        }
+
+        self.items.swap(1, self.count);
+        self.count -= 1;
+
+        let root = self.items.pop();
+
+        let mut i = 1;
+        let mut maxPos = i;
+        loop {
+            if i * 2 < self.count && (self.comparator)(&self.items[i * 2], &self.items[i]) {
+                maxPos = i * 2;
+            }
+            if i * 2 + 1 < self.count
+                && (self.comparator)(&self.items[i * 2 + 1], &self.items[self.count])
+            {
+                maxPos = i * 2 + 1;
+            }
+            if maxPos == i {
+                break;
+            }
+            self.items.swap(i, maxPos);
+            i = maxPos;
+        }
+
+        root
     }
 }
 
